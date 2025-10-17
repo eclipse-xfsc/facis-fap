@@ -203,16 +203,16 @@ If the UI loads in a new tab, the setup is complete.
 
 ---
 
-## **4 – Flow Architecture and Logic**
+## 4 – Flow Architecture and Logic
 
 | Step | Description | Input | Output |
 |------|--------------|--------|--------|
-| 1 | Verify RSA/X.509 certificates | Certificate chain | `msg.certVerified = true/false` |
-| 2 | Create DID and chain files | Organization data | `msg.did`, `msg.chainFileUrl` |
-| 3 | Publish and verify URLs | DID URLs | `msg.didUrlVerified` |
-| 4 | Generate credential IDs and check registries | DID | `msg.vcId` |
-| 5 | Issue Verifiable Credentials | VC IDs | `msg.vcSigned[]` |
-| 6 | Create Verifiable Presentation | Signed VCs | `msg.vp` |
+| 1 | Verify RSA/X.509 certificates | Bundle.ca-bundle, Certificate.crt, pvtKey.key | msg.data.recordDetails.files.result |
+| 2 | Create DID and chain files | Organization data | msg.data.recordDetials.downloadFiles.did.fileContent, msg.data.recordDetials.downloadFiles.chain.fileContent |
+| 3 | Publish and verify URLs | DID URLs | msg.data.recordDetails.urls.state |
+| 4 | Generate credential IDs and check registries | DID | msg.data.recordDetails.ids |
+| 5 | Issue Verifiable Credentials | VC IDs | msg.data.recordDetails.vcs |
+| 6 | Create Verifiable Presentation | Signed VCs | msg.data.recordDetails.vp |
 
 ---
 
@@ -247,33 +247,7 @@ If the UI loads in a new tab, the setup is complete.
 
 ---
 
-## **6 – Environment Variables**
-
-```env
-# Core Config
-ORCE_PORT=1880
-UI_PUBLIC_URL=/partnerOnboarding
-ALLOWED_ORIGINS=*
-
-# MongoDB
-MONGODB_URI=mongodb+srv://<user>:<password>@<host>/<db>
-
-# Security
-JWT_AI_KEY=
-
-# External Services
-WIZARD_URL=https://federation.example.org/wizard
-COMPLIANCE_URL=https://federation.example.org/compliance
-REGISTRY_URL=https://federation.example.org/registry
-NOTARY_URL=https://federation.example.org/notary
-OCM_URL=https://federation.example.org/ocm
-CAT_URL=https://federation.example.org/catalogue
-TSA_URL=https://federation.example.org/tsa
-```
-
----
-
-## **7 – Operations and Maintenance**
+## **6 – Operations and Maintenance**
 
 | Task | Command |
 |------|----------|
@@ -281,11 +255,10 @@ TSA_URL=https://federation.example.org/tsa
 | Backup | Export flow (JSON) or snapshot `/data` |
 | Restore | Menu → Import → Paste JSON |
 | Update | Replace [`flows.full.json`](./flows/flows.full.json) → Redeploy |
-| Monitor | Check `/health` endpoint |
 
 ---
 
-## **8 – Summary**
+## **7 – Summary**
 
 | Category | Description |
 |-----------|-------------|
@@ -293,15 +266,15 @@ TSA_URL=https://federation.example.org/tsa
 | **Platform** | ORCE (Orchestration Engine) |
 | **Implementation** | Flow-based application (6-step orchestration) |
 | **Domain** | Federated Ecosystem Onboarding |
-| **Integrations** | Wizard, Compliance, Registry, Notary, OCM, CAT, TSA |
-| **Deployment** | Manual import or Docker Compose auto-import |
-| **Security** | Encrypted credentials, .env isolation, TLS |
-| **Deliverables** | Flow, documentation, scripts |
+| **Integrations** | Wizard, Compliance, Registry, Notary, OCM, CAT |
+| **Deployment** | Manual flow import |
+| **Security** | TLS |
+| **Deliverables** | Flows, Documentations, ESBs |
 | **License** | Apache 2.0 |
 
 ---
 
-## **9 – References**
+## **8 – References**
 
 - [Eclipse XFSC – ORCE (Orchestration Engine)](https://github.com/eclipse-xfsc/orchestration-engine)  
 - [Eclipse XFSC – FACIS Framework](https://github.com/eclipse-xfsc/facis)  
