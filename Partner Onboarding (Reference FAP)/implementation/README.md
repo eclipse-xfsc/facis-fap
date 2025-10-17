@@ -221,28 +221,77 @@ If the UI loads in a new tab, the setup is complete.
 ### **Input Example**
 ```json
 {
-  "session": { "id": "uuid", "timestamp": "ISO" },
-  "recordDetails": {
-    "organization": {
-      "name": "Example GmbH",
-      "domain": "example.com",
-      "vatID": "DE123456789"
-    }
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/gaia-x/development#"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "gx:VatID"
+  ],
+  "id": "https://example.com/.well-known/lrn.json",
+  "name": "VAT ID",
+  "description": "Value Added Tax Identifier",
+  "issuer": "did:web:compliance.example.org:notary:v2",
+  "validFrom": "2025-10-12T11:01:42.092+00:00",
+  "validUntil": "2025-10-15T23:59:59.000+00:00",
+  "credentialSubject": {
+    "id": "https://example.com/.well-known/lrn.json#subject",
+    "type": "gx:VatID",
+    "gx:vatID": "DE123456789",
+    "gx:countryCode": "DE"
   },
-  "certificateChain": "-----BEGIN CERTIFICATE-----...",
-  "privJwk": { "kty": "RSA", "n": "...", "e": "AQAB", "d": "..." }
+  "evidence": {
+    "gx:evidenceOf": "gx:VatID",
+    "gx:evidenceURL": "http://ec.europa.eu/taxation_customs/vies/services/checkVatService",
+    "gx:executionDate": "2025-10-12T11:01:42.092+00:00"
+  }
 }
+
 ```
 
 ### **Output Example**
 ```json
 {
-  "did": "did:web:example.com",
-  "chainFile": "https://example.com/.well-known/chain.json",
-  "vcId": "urn:uuid:abc123",
-  "vcSigned": [{ "type": "LRN", "jwt": "..." }],
-  "vp": { "type": "VerifiablePresentation", "proof": { "jwt": "..." } }
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://w3id.org/gaia-x/development#"
+  ],
+  "type": [
+    "VerifiableCredential",
+    "gx:LabelCredential"
+  ],
+  "id": "https://example.com/.well-known/credential-offers/demo-label",
+  "issuer": "did:web:compliance.example.org:notary:v2",
+  "validFrom": "2025-10-12T11:01:53.348Z",
+  "validUntil": "2025-10-15T23:59:59.000Z",
+  "credentialSubject": {
+    "id": "https://example.com/.well-known/credential-offers/demo-label#cs",
+    "gx:labelLevel": "SC",
+    "gx:engineVersion": "2.9.0",
+    "gx:rulesVersion": "CD25.03",
+    "gx:compliantCredentials": [
+      {
+        "id": "https://example.com/.well-known/legal-person.json",
+        "type": "gx:LegalPerson,gx:LegalPerson",
+        "gx:digestSRI": "sha256-xxxx"
+      },
+      {
+        "type": "gx:Issuer",
+        "gx:digestSRI": "sha256-xxxx"
+      },
+      {
+        "id": "https://example.com/.well-known/lrn.json",
+        "type": "gx:VatID,gx:VatID",
+        "gx:digestSRI": "sha256-xxxx"
+      }
+    ],
+    "gx:validatedCriteria": [
+      "https://docs.gaia-x.eu/policy-rules-committee/compliance-document/25.03/criteria_participant/#PA1.1"
+    ]
+  }
 }
+
 ```
 
 ---
